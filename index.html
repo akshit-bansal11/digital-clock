@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character encoding set to UTF-8 for supporting all characters -->
+    <meta charset="UTF-8" />
+
+    <!-- Responsive layout: ensures the page looks good on all devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Animated Digital Clock</title>
+
+    <!-- Tailwind CSS CDN for utility-first CSS styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS -->
+    <style>
+        /* Background animation using a gradient that shifts colors over time */
+        body {
+            background: linear-gradient(-45deg, #1a1a40, #0f2027, #2c5364, #1f4037);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        /* Animation keyframes for moving background gradient */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Class to apply animated gradient effect on text (for the time) */
+        .animated-gradient-text {
+            background: linear-gradient(270deg, #facc15, #f97316, #f43f5e, #8b5cf6); /* yellow, orange, pink, purple */
+            background-size: 600% 600%;  /* Enlarged gradient area for smooth transition */
+            background-clip: text;  /* Clip background to text */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;  /* Make actual text transparent */
+            animation: textGradient 8s ease infinite;
+        }
+
+        /* Animation keyframes for shifting the text gradient */
+        @keyframes textGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+
+<!-- Tailwind classes to center content vertically and horizontally with full height -->
+<body class="text-white flex flex-col items-center justify-center h-screen font-mono">
+
+    <!-- Main container for clock and date -->
+    <div class="bg-black bg-opacity-40 px-10 py-8 rounded-2xl shadow-2xl text-center">
+
+        <!-- Clock display (initial placeholder 00:00:00), animated gradient applied -->
+        <div id="time" class="text-9xl mb-4 animated-gradient-text">00:00:00</div>
+
+        <!-- Date display, initially blank -->
+        <div id="date" class="text-2xl tracking-widest uppercase"></div>
+    </div>
+
+    <!-- JavaScript to handle live clock and date -->
+    <script>
+        // Function to update the digital clock and date every second
+        const updateClock = () => {
+            // Create a new Date object to get the current time and date
+            const now = new Date();
+
+            // Extract hours, minutes, and seconds from the Date object
+            // padStart ensures the string is always 2 digits (e.g. "03", "09")
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            // Arrays for converting numeric day and month to human-readable names
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const months = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"];
+
+            // Extract full day name, date number, month name, and year
+            const day = days[now.getDay()];           // e.g., "Wednesday"
+            const date = now.getDate();               // e.g., 8
+            const month = months[now.getMonth()];     // e.g., "June"
+            const year = now.getFullYear();           // e.g., 2025
+
+            // Update the inner text of the #time element with formatted time
+            document.getElementById("time").textContent = `${hours}:${minutes}:${seconds}`;
+
+            // Update the inner text of the #date element with full readable date
+            document.getElementById("date").textContent = `${day}, ${date} ${month} ${year}`;
+        };
+
+        // Call updateClock every 1000 milliseconds (1 second)
+        setInterval(updateClock, 1000);
+
+        // Call it once immediately so there's no delay on page load
+        updateClock();
+    </script>
+
+</body>
+</html>
